@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orbit — A daily task planner</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+</head>
+<body data-theme="light">
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <div>
+        <h1>Orbit</h1>
+        <p id="todayLabel">Loading…</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="stat-strip">
+    <div class="ring-cell">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle cx="26" cy="26" r="22" fill="none" stroke="var(--paper-line)" stroke-width="5"/>
+        <circle id="progressRing" cx="26" cy="26" r="22" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round" stroke-dasharray="138.2" stroke-dashoffset="138.2" transform="rotate(-90 26 26)"/>
+        <text id="progressText" x="26" y="30" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)" font-family="IBM Plex Mono, monospace">0%</text>
+      </svg>
+      <div class="ring-label">Today's<br><b id="progressWord">progress</b></div>
+    </div>
+    <div class="stat-cell done"><div class="num" id="doneCount">0</div><div class="lab">completed</div></div>
+    <div class="stat-cell pending"><div class="num" id="pendingCount">0</div><div class="lab">pending</div></div>
+    <div class="stat-cell overdue"><div class="num" id="overdueCount">0</div><div class="lab">overdue</div></div>
+  </div>
+
+  <div class="composer">
+    <div class="composer-row1">
+      <input type="text" id="taskInput" placeholder="Add a task — e.g. Electicity bill payment " maxlength="200">
+      <button class="add-btn" id="addBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Add
+      </button>
+    </div>
+    <div class="composer-row2">
+      <select id="categorySelect">
+        <option value="Personal">Personal</option>
+        <option value="Work">Work</option>
+        <option value="Health">Health</option>
+        <option value="Learning">Learning</option>
+        <option value="Errands">Errands</option>
+      </select>
+      <select id="prioritySelect">
+        <option value="low">Low priority</option>
+        <option value="medium" selected>Medium priority</option>
+        <option value="high">High priority</option>
+      </select>
+      <input type="date" id="dueDateInput">
+    </div>
+    <div class="error-msg" id="errorMsg">Give the task a name before adding it.</div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search tasks…">
+    </div>
+    <select class="sort-select" id="sortSelect">
+      <option value="created">Newest first</option>
+      <option value="due">By due date</option>
+      <option value="priority">By priority</option>
+      <option value="az">A–Z</option>
+    </select>
+  </div>
+  <div class="chip-row" id="statusChips" style="margin-bottom:10px;">
+    <button class="chip active" data-status="all">All</button>
+    <button class="chip" data-status="pending">Pending</button>
+    <button class="chip" data-status="completed">Completed</button>
+  </div>
+  <div class="chip-row" id="categoryChips" style="margin-bottom:20px;">
+    <button class="chip active" data-cat="all">All categories</button>
+    <button class="chip" data-cat="Personal">Personal</button>
+    <button class="chip" data-cat="Work">Work</button>
+    <button class="chip" data-cat="Health">Health</button>
+    <button class="chip" data-cat="Learning">Learning</button>
+    <button class="chip" data-cat="Errands">Errands</button>
+  </div>
+
+  <div class="list" id="taskList"></div>
+</div>
+
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal">
+    <h3>Edit task</h3>
+    <div class="field">
+      <label for="editTitle">Task name</label>
+      <input type="text" id="editTitle" maxlength="200">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="editCategory">Category</label>
+        <select id="editCategory">
+          <option value="Personal">Personal</option>
+          <option value="Work">Work</option>
+          <option value="Health">Health</option>
+          <option value="Learning">Learning</option>
+          <option value="Errands">Errands</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="editPriority">Priority</label>
+        <select id="editPriority">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="editDue">Due date</label>
+      <input type="date" id="editDue">
+    </div>
+    <div class="error-msg" id="editError">Give the task a name before saving.</div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelEdit">Cancel</button>
+      <button class="btn-solid" id="saveEdit">Save changes</button>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
