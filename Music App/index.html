@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Musica · Music Player</title>
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    >
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <script defer src="stript.js"></script>
+</head>
+
+<body>
+
+
+    <main class="app">
+        <header class="header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-wave-square"></i>
+                </div>
+
+                <div>
+                    <h1>Musica</h1>
+                    <span>Music Player</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="player">
+
+            <div class="artwork">
+                <img id="albumCover" src="" alt="Album Cover">
+
+                <!-- <div class="disc">
+                    <div class="disc-center"></div>
+                </div> -->
+            </div>
+
+            <div class="song-info">
+                <h2 id="songTitle">Song Title</h2>
+                <p id="songArtist">Artist</p>
+            </div>
+
+            <div class="progress-area">
+                <span id="currentTime">0:00</span>
+
+                <input
+                    type="range"
+                    id="progress"
+                    min="0"
+                    max="100"
+                    value="0"
+                >
+
+                <span id="duration">0:00</span>
+            </div>
+
+            <div class="controls">
+
+                <button id="shuffleBtn" class="control-btn">
+                    <i class="fa-solid fa-shuffle"></i>
+                </button>
+
+                <button id="prevBtn" class="control-btn">
+                    <i class="fa-solid fa-backward-step"></i>
+                </button>
+
+                <button id="playBtn" class="play-btn">
+                    <i class="fa-solid fa-play"></i>
+                </button>
+
+                <button id="nextBtn" class="control-btn">
+                    <i class="fa-solid fa-forward-step"></i>
+                </button>
+
+                <button id="repeatBtn" class="control-btn">
+                    <i class="fa-solid fa-repeat"></i>
+                </button>
+
+            </div>
+
+            <div class="volume-area">
+                <button id="volumeBtn" class="control-btn">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+
+                <input
+                    type="range"
+                    id="volume"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="1"
+                >
+            </div>
+
+        </section>
+
+        <section class="playlist-section">
+
+            <div class="tabs">
+                <button class="tab active" data-tab="all">
+                    All Songs
+                </button>
+
+                <button class="tab" data-tab="loved">
+                    <i class="fa-solid fa-heart"></i>
+                    Loved
+                </button>
+            </div>
+
+            <div id="playlist" class="playlist"></div>
+
+        </section>
+
+    </main>
+
+    <audio id="audio"></audio>
+
+</body>
+</html>
